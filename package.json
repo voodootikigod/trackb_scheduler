@@ -1,0 +1,13 @@
+{
+  "name": "trackb_scheduler",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": ">= 2.5.8",
+    "hireds": ">= 0.1.14",
+    "redis": ">= 0.7.1"
+  },
+  "engines": {
+    "node": "0.6.10",
+    "npm": "1.1.1"
+  }
+}
