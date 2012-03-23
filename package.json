@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "express": ">= 2.5.8",
-    "hireds": ">= 0.1.14",
+    "hiredis": ">= 0.1.14",
     "redis": ">= 0.7.1"
   },
   "engines": {
