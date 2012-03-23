@@ -1,14 +1,17 @@
 var express = require("express");
 var redis = require("redis");
-var year = "2012"
 var sessions_per_day = 20;
-var schedule = [
-	[],				// First Day
-	[]				// Second Day
-];
+var schedule = {
+	max: sessions_per_day,
+	year: 2012,
+	lineup: [
+		[],				// First Day
+		[]				// Second Day
+	]	
+};
 
 
-var client = redis.createClient(port, host, auth)
+var client = redis.createClient();
 var app = express.createServer(
 	  express.logger()
 	, express.bodyParser()
@@ -18,12 +21,17 @@ var SCHEDULE_KEY = year+'schedule';
 
 
 client.get(SCHEDULE_KEY, function (err, buffer) {
-	var data = buffer.toString();
 	if (buffer) {
-		schedule = JSON.parse(buffer);
+		var data = buffer.toString();
+		schedule = JSON.parse(data);
 	}
 	app.get("/schedule.json", function (req, res) {
-		res.send(schedule);
+		if (req.query.callback) {
+			res.send(";;"+req.query.callback+"("+JSON.stringify(schedule)+");");
+		} else {
+			res.send(schedule);	
+		}
+		
 	})
 	app.post("/schedule/:day/:slot", function (req, res) {
 		var errors = [];
@@ -47,15 +55,15 @@ client.get(SCHEDULE_KEY, function (err, buffer) {
 			errors.push("You must specify a valid day for your timeslot.");
 		if (0 > slotidx || sessions_per_day <= slotidx)	
 			errors.push("You must specify a valid time for your timeslot.");
-		if (schedule[dayidx][slotidx]) 
+		if (schedule.lineup[dayidx][slotidx]) 
 			errors.push("The speaking slot requested has already been filled. Try another slot.");
 		if (errors.length == 0) {
-			schedule[dayidx][slotidx] = {
+			schedule.lineup[dayidx][slotidx] = {
 				name: name,
 				title: title
 			};
-			res.send(schedule);
 			redis.set(year+'schedule', JSON.stringify(schedule));
+			res.send(schedule);
 		} else {
 			res.send(errors, 500);
 		}
