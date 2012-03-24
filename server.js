@@ -15,6 +15,7 @@ var schedule = {
 var app = express.createServer(
 	  express.logger()
 	, express.bodyParser()
+	, express.static()
 );
 var SCHEDULE_KEY = '2012_schedule';
 
