@@ -29,8 +29,9 @@ function render_track_b(data) {
 
 
 
-$.getJSON("/schedule.json", render_track_b);
+
 $(function () {
+  $.getJSON("/schedule.json", render_track_b);
 	$(document).on("click", "a.tb-register", function (e) {
 		e.stopPropagation(); e.preventDefault();
 		
