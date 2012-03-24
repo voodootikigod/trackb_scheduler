@@ -1,5 +1,6 @@
 var express = require("express");
-var redis = require("redis");
+var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+
 var sessions_per_day = 20;
 var schedule = {
 	max: sessions_per_day,
@@ -11,16 +12,15 @@ var schedule = {
 };
 
 
-var client = redis.createClient();
 var app = express.createServer(
 	  express.logger()
 	, express.bodyParser()
 );
-var SCHEDULE_KEY = year+'schedule';
+var SCHEDULE_KEY = '2012_schedule';
 
 
 
-client.get(SCHEDULE_KEY, function (err, buffer) {
+redis.get(SCHEDULE_KEY, function (err, buffer) {
 	if (buffer) {
 		var data = buffer.toString();
 		schedule = JSON.parse(data);
