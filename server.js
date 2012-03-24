@@ -32,6 +32,9 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 			res.send(schedule);	
 		}
 		
+	});
+	app.get("/",function (req, res ) {
+	  res.send("ohai");
 	})
 	app.post("/schedule/:day/:slot", function (req, res) {
 		var errors = [];
