@@ -41,7 +41,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		
 	});
 	app.get("/",function (req, res ) {
-	  res.send("ohai");
+	  res.redirect("http://2012.jsconf.us/#/schedule");
 	});
 
 	
@@ -55,7 +55,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
     	]	
     };
 	  redis.set(SCHEDULE_KEY, JSON.stringify(schedule));
-	  res.redirect("http://2012.jsconf.us");
+	  res.redirect("http://2012.jsconf.us/#/schedule");
 	});
 	
 	console.log("/schedule/"+ADMIN_KEY+"reset/:day/:slot");
@@ -72,7 +72,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		  delete schedule.lineup[dayidx][slotidx];
 			redis.set(SCHEDULE_KEY, JSON.stringify(schedule));
 		}
-	  res.redirect("http://2012.jsconf.us");
+	  res.redirect("http://2012.jsconf.us/#/schedule");
 	});
 	// utilize get to allow for cross domain posting via jsonp
 	app.get("/schedule/:day/:slot", function (req, res) {
