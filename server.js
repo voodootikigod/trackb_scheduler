@@ -22,6 +22,8 @@ var SCHEDULE_KEY = '2012_schedule';
 var ADMIN_KEY = process.env.ADMIN_KEY;
 if (ADMIN_KEY) {
   ADMIN_KEY+="/";
+} else {
+  ADMIN_KEY = "";
 }
 
 
