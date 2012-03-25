@@ -73,7 +73,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 				name: name,
 				title: title
 			};
-			redis.set(year+'schedule', JSON.stringify(schedule));
+			redis.set(SCHEDULE_KEY, JSON.stringify(schedule));
 			send(schedule);
 		} else {
 			send({errors: errors}, 400);
