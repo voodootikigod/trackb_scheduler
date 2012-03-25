@@ -359,7 +359,7 @@ module.exports.registered = function (email) {
   var addr = email.toLowerCase();
   var md5sum = crypto.createHash('md5');
   md5sum.update(addr);
-  return (hashes.indexOf(md5sum.digest('hex') >= 0);
+  return (hashes.indexOf(md5sum.digest('hex')) >= 0);
 }
 
 
