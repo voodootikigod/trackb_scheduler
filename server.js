@@ -53,7 +53,6 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		var slotidx = parseInt(req.params.slot,10);
 		var title = req.body.title;
 		var name = req.body.name;
-		var av_confirm = req.body.av_confirm;
 		var email = req.body.email;
 		
 		if (isblank(name) || name.length < 2)
@@ -62,8 +61,6 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		  errors.push("Give us a punchy title.")
 		if (isblank(email) || !email.match(/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/) || EMAIL_ADDRESSES.indexOf(email) < 0)
 		  errors.push("Email must be the same as what you provided when registering.")
-		if (av_confirm != "1")
-		  errors.push("You have to let us make you famous.");
 		if (0 > dayidx || 1 < dayidx)	
 			errors.push("You must specify a valid day for your timeslot.");
 		if (0 > slotidx || sessions_per_day <= slotidx)	
