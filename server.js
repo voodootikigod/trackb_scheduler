@@ -56,7 +56,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 	  res.redirect("http://2012.jsconf.us");
 	});
 	
-	
+	console.log("/schedule/"+ADMIN_KEY+"reset/:day/:slot");
 	
 	app.get("/schedule/"+ADMIN_KEY+"reset/:day/:slot", function (req, res) {
 	  var dayidx = parseInt(req.params.day,10);
