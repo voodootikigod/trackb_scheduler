@@ -19,7 +19,10 @@ var app = express.createServer(
 	, express.static(__dirname+"/public")
 );
 var SCHEDULE_KEY = '2012_schedule';
-
+var ADMIN_KEY = process.env.ADMIN_KEY;
+if (ADMIN_KEY) {
+  ADMIN_KEY+="/";
+}
 
 
 redis.get(SCHEDULE_KEY, function (err, buffer) {
@@ -38,7 +41,37 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 	app.get("/",function (req, res ) {
 	  res.send("ohai");
 	});
+
 	
+	app.get("/schedule/"+ADMIN_KEY+"reset", function (req, res) {
+	  schedule = {
+    	max: sessions_per_day,
+    	year: 2012,
+    	lineup: [
+    		[],				// First Day
+    		[]				// Second Day
+    	]	
+    };
+	  redis.set(SCHEDULE_KEY, JSON.stringify(schedule));
+	  res.redirect("http://2012.jsconf.us");
+	});
+	
+	
+	
+	app.get("/schedule/"+ADMIN_KEY+"reset/:day/:slot", function (req, res) {
+	  var dayidx = parseInt(req.params.day,10);
+		var slotidx = parseInt(req.params.slot,10);
+		var legit = true;
+		if (0 > dayidx || 1 < dayidx)	
+			legit = false;
+		if (0 > slotidx || sessions_per_day <= slotidx)	
+			legit = false;
+		if (legit) {
+		  delete schedule.lineup[dayidx][slotidx];
+			redis.set(SCHEDULE_KEY, JSON.stringify(schedule));
+		}
+	  res.redirect("http://2012.jsconf.us");
+	});
 	// utilize get to allow for cross domain posting via jsonp
 	app.get("/schedule/:day/:slot", function (req, res) {
     var send = function (data, statuscode){
@@ -56,10 +89,10 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		var name = req.query.name;
 		var email = req.query.email;
 		
-		if (isblank(name) || name.length < 2)
+		if (isblank(name) || name.length < 2 || name.length > 120)
 			errors.push("A real name, or else!") 
-	  if (isblank(title) || title.length < 2)
-		  errors.push("Give us a punchy title.")
+	  if (isblank(title) || title.length < 2 || title.length > 200)
+		  errors.push("Give us a punchy title (between 2 and 200 characters).")
 		if (isblank(email) || !twelve.registered(email))
 		  errors.push("Email must be the same as what you provided when registering.")
 		if (0 > dayidx || 1 < dayidx)	
