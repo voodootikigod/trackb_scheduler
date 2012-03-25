@@ -60,7 +60,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 			errors.push("A real name, or else!") 
 	  if (isblank(title) || title.length < 2)
 		  errors.push("Give us a punchy title.")
-		if (isblank(email) || !email.match(/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/) || twelve.registered(email))
+		if (isblank(email) || !twelve.registered(email))
 		  errors.push("Email must be the same as what you provided when registering.")
 		if (0 > dayidx || 1 < dayidx)	
 			errors.push("You must specify a valid day for your timeslot.");
