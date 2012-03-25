@@ -36,8 +36,17 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 	});
 	app.get("/",function (req, res ) {
 	  res.send("ohai");
-	})
-	app.post("/schedule/:day/:slot", function (req, res) {
+	});
+	
+	// utilize get to allow for cross domain posting via jsonp
+	app.get("/schedule/:day/:slot", function (req, res) {
+    var send = function (data){
+      if (req.query.callback) {
+  			res.send(";;"+req.query.callback+"("+JSON.stringify(data)+");");
+  		} else {
+  			res.send(data);	
+  		}
+    }
 		var errors = [];
 		
 		var dayidx = parseInt(req.params.day,10);
@@ -67,9 +76,9 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 				title: title
 			};
 			redis.set(year+'schedule', JSON.stringify(schedule));
-			res.send(schedule);
+			send(schedule);
 		} else {
-			res.send(errors, 500);
+			send({errors: errors});
 		}
 		
 	})
