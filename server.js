@@ -52,9 +52,9 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 		
 		var dayidx = parseInt(req.params.day,10);
 		var slotidx = parseInt(req.params.slot,10);
-		var title = req.body.title;
-		var name = req.body.name;
-		var email = req.body.email;
+		var title = req.query.title;
+		var name = req.query.name;
+		var email = req.query.email;
 		
 		if (isblank(name) || name.length < 2)
 			errors.push("A real name, or else!") 
