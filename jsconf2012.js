@@ -360,7 +360,7 @@ module.exports.registered = function (email) {
   var md5sum = crypto.createHash('md5');
   md5sum.update(addr);
   var myhash = md5sum.digest('hex');
-  console.log(myhash);
+  console.log(""+email+":>"+myhash);
   return (hashes.indexOf(myhash) >= 0);
 }
 
