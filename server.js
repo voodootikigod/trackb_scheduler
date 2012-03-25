@@ -1,5 +1,6 @@
 var express = require("express");
 var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
+var twelve = require("./jsconf2012");
 
 var sessions_per_day = 20;
 var schedule = {
@@ -59,7 +60,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 			errors.push("A real name, or else!") 
 	  if (isblank(title) || title.length < 2)
 		  errors.push("Give us a punchy title.")
-		if (isblank(email) || !email.match(/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/) || EMAIL_ADDRESSES.indexOf(email) < 0)
+		if (isblank(email) || !email.match(/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/) || twelve.registered(email))
 		  errors.push("Email must be the same as what you provided when registering.")
 		if (0 > dayidx || 1 < dayidx)	
 			errors.push("You must specify a valid day for your timeslot.");
