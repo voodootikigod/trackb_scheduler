@@ -40,11 +40,14 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 	
 	// utilize get to allow for cross domain posting via jsonp
 	app.get("/schedule/:day/:slot", function (req, res) {
-    var send = function (data){
+    var send = function (data, statuscode){
+      if (!statuscode) { 
+        statuscode = 200;
+      }
       if (req.query.callback) {
-  			res.send(";;"+req.query.callback+"("+JSON.stringify(data)+");");
+  			res.send(";;"+req.query.callback+"("+JSON.stringify(data)+");", statuscode);
   		} else {
-  			res.send(data);	
+  			res.send(data,statuscode);	
   		}
     }
 		var errors = [];
@@ -78,7 +81,7 @@ redis.get(SCHEDULE_KEY, function (err, buffer) {
 			redis.set(year+'schedule', JSON.stringify(schedule));
 			send(schedule);
 		} else {
-			send({errors: errors});
+			send({errors: errors}, 400);
 		}
 		
 	})
